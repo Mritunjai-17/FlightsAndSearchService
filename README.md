@@ -8,7 +8,7 @@
 - Inside the `src/config` folder create a new file `config.json` and then add the following piece of json.
 ```
 {
-  "development": {
+  "development": { 
     "username": <YOUR_DB_LOGIN_NAME>,
     "password": <YOUR_DB_PASSWORD>,
     "database": "Flights_Search_DB_Dev",
@@ -18,3 +18,4 @@
 }
 
 ```
+- Once you've added your db config as listed above, go to the src folder from your terminal and execute `npx sequelize db:create`.
