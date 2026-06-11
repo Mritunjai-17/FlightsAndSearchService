@@ -33,6 +33,10 @@ and then execute
  - A city has many airports but one airplort belongs belongs to one city.
  - One airport can have many flights but a flights belongs to one airport.
 
+```
+npx sequelize model:generate --name Airport --attributes name:String,address:String,cityId:Integer
+
+```
  ## Tables 
 
  ### City --> id, name, created_at, updated_at 
