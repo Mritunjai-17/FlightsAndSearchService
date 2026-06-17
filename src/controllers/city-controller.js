@@ -8,7 +8,7 @@ const cityService = new CityService();
  */
 const create = async (req, res) => {
     try {
-            const city = await cityService.createCity(req.body);
+        const city = await cityService.createCity(req.body);
             return res.status(201).json({
                 data: city,
                 success: true,
@@ -18,7 +18,7 @@ const create = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            data: {},
+            data: {}, 
             success: false,
             message: 'Failed to create a city',
             err: error
