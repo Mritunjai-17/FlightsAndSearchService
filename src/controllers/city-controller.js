@@ -8,7 +8,7 @@ const cityService = new CityService();
  */
 const create = async (req, res) => {
     try {
-        const city = await cityService.createCity(req.body);
+        const city = await cityService.create(req.body);
             return res.status(201).json({
                 data: city,
                 success: true,
@@ -29,7 +29,7 @@ const create = async (req, res) => {
 // delete. -> /city/:id -> req.params.id -> we can get the id from the request params and then we can pass it to the service layer.
 const destroy = async (req, res) => {
     try {
-         const response = await cityService.deleteCity(req.params.id);
+         const response = await cityService.delete(req.params.id);
             return res.status(200).json({
                 data: response,
                 success: true,
@@ -51,7 +51,7 @@ const destroy = async (req, res) => {
 // and then we can get the city details from the service layer and then we can return the response to the client.
 const update = async (req, res) => {
     try {
-        const response = await cityService.updateCity(req.params.id, req.body);
+        const response = await cityService.update(req.params.id, req.body);
             return res.status(200).json({
                 data: response,
                 success: true,
@@ -73,7 +73,7 @@ const update = async (req, res) => {
 // and then we can get the city details from the service layer and then we can return the response to the client.
 const get = async (req, res) => {
     try {
-        const response = await cityService.getCity(req.params.id);
+        const response = await cityService.get(req.params.id);
             return res.status(200).json({
                 data: response,
                 success: true,
@@ -94,7 +94,7 @@ const get = async (req, res) => {
 const getAll = async (req, res) => {
     try{
         console.log(req.params); 
-        const cities = await cityService.getAllCities(req.query);
+        const cities = await cityService.getAll(req.query);
         return res.status(200).json({
                 data: cities,
                 success: true,
