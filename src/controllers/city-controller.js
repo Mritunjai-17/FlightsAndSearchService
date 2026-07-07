@@ -29,7 +29,7 @@ const create = async (req, res) => {
 // delete. -> /city/:id -> req.params.id -> we can get the id from the request params and then we can pass it to the service layer.
 const destroy = async (req, res) => {
     try {
-         const response = await cityService.delete(req.params.id);
+         const response = await cityService.destroy(req.params.id);
             return res.status(200).json({
                 data: response,
                 success: true,

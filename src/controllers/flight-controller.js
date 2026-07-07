@@ -45,9 +45,29 @@ const getAll = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            ata: {}, 
+            data: {}, 
             success: false,
             message: 'Failed to fetch the flights',
+            err: error
+        });
+    }
+}
+
+const update = async (req, res) => {
+    try {
+        const response = await flightService.updateFlight(req.params.id, req.body);
+        return res.status(SuccessCodes.OK).json({
+            data: response,
+            success: true,
+            message: 'Successfully updated the flight',
+            err: {}
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            data: {}, 
+            success: false,
+            message: 'Failed to update the flight',
             err: error
         });
     }
@@ -56,4 +76,5 @@ const getAll = async (req, res) => {
 module.exports = {
     createFlight,
     getAll,
+    update
 }
