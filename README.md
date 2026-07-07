@@ -1,44 +1,90 @@
- # Welcome to flight Serivce 
+# Flights and Search Service
 
- ## Project Setup
- - Clone the project on your local.
- - Execute `npm install` on the same path as of your root directory of tech downloaded project.
- - Create a `.env` in the root directory adn add the following environment variable 
-    - `PORT=3000`
-- Inside the `src/config` folder create a new file `config.json` and then add the following piece of json.
-```
-{
-  "development": { 
-    "username": <YOUR_DB_LOGIN_NAME>,
-    "password": <YOUR_DB_PASSWORD>,
-    "database": "Flights_Search_DB_Dev",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-}
+This microservice handles the storage, schedule creation, and advanced search queries for flights, airports, airplanes, and cities.
 
-```
-- Once you've added your db config as listed above, go to the src folder from your terminal and execute `npx sequelize db:create`.
-and then execute 
+## Features
+- **City CRUD**: Management of operational city destinations.
+- **Airport Management**: Creates and links airports to specific cities.
+- **Flight Scheduling**: Creates flight entries referencing specific airplanes, arrival/departure airports, schedules, and pricing.
+- **Advanced Search Filters**: Filter flights dynamically by price ranges, departure/arrival airports, dates, and number of remaining seats.
+- **Seat Management**: Exposed `PATCH` route to update remaining flight seats when seats are booked or cancelled.
 
-`npx sequelize db:migrate`
+---
 
-## DB Design 
- - Airplane Table
- - FLight Table
- - Airport Table
- - City Table
+## Setup & Configuration
 
- - A Flight belongs to an a airplane but one airplane can be used in multiple flights.
- - A city has many airports but one airplort belongs belongs to one city.
- - One airport can have many flights but a flights belongs to one airport.
+1. Create a `.env` file in the root directory:
+   ```env
+   PORT=3000
+   ```
+2. Configure your MySQL credentials in `src/config/config.json`.
+3. Install dependencies and initialize the database:
+   ```bash
+   npm install
+   npx sequelize db:create
+   npx sequelize db:migrate
+   ```
+4. Seed default airport and airplane data:
+   ```bash
+   npx sequelize db:seed:all
+   ```
+5. Start the service:
+   ```bash
+   npm start
+   ```
 
-```
-npx sequelize model:generate --name Airport --attributes name:String,address:String,cityId:Integer
+---
 
-```
- ## Tables 
+## DB Design & Relationships
+- **City $\leftrightarrow$ Airport**: One-to-Many. A city can contain multiple airports, but an airport belongs to a single city.
+- **Airplane $\leftrightarrow$ Flight**: One-to-Many. An airplane can fly multiple flight schedules, but a flight belongs to a single airplane.
+- **Airport $\leftrightarrow$ Flight**: One-to-Many. An airport hosts many departing/arriving flights.
 
- ### City --> id, name, created_at, updated_at 
- ### Airport --> id, name, address, city_id, created_at, updated_at
-      Relationship --> City has many airports and Airport belongs to a city(one to many).
+---
+
+## API Endpoints
+
+### 1. Cities
+*   **Create City**: `POST /api/v1/city`
+    ```json
+    { "name": "New Delhi" }
+    ```
+*   **Delete City**: `DELETE /api/v1/city/:id`
+*   **Get City**: `GET /api/v1/city/:id`
+*   **Update City**: `PUT /api/v1/city/:id`
+    ```json
+    { "name": "Delhi NCR" }
+    ```
+
+### 2. Airports
+*   **Create Airport**: `POST /api/v1/airport`
+    ```json
+    {
+      "name": "Indira Gandhi International Airport",
+      "address": "New Delhi, Delhi",
+      "cityId": 1
+    }
+    ```
+
+### 3. Flights
+*   **Create Flight**: `POST /api/v1/flights`
+    ```json
+    {
+      "flightNumber": "AI-101",
+      "airplaneId": 1,
+      "departureAirportId": 1,
+      "arrivalAirportId": 2,
+      "arrivalTime": "2026-07-15T15:30:00Z",
+      "departureTime": "2026-07-15T12:00:00Z",
+      "price": 4500,
+      "boardingGate": "Gate A3"
+    }
+    ```
+*   **Search Flights**: `GET /api/v1/flights`
+    *   *Query Parameters (optional)*: `?departureAirportId=1&arrivalAirportId=2&minPrice=3000&maxPrice=6000&date=2026-07-15&tripType=oneWay`
+*   **Update Flight details/seats**: `PATCH /api/v1/flights/:id`
+    ```json
+    {
+      "totalSeats": 120
+    }
+    ```
